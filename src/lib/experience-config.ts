@@ -19,10 +19,9 @@ export type Scene = {
 export const audioSrc = "/assets/audio/background-music.mp3";
 
 export const recipients: Recipient[] = [
-  { id: "tia-ana", label: "Tía Ana", displayName: "Tía Ana" },
-  { id: "tio-carlos", label: "Tío Carlos", displayName: "Tío Carlos" },
-  { id: "prima-sofia", label: "Prima Sofía", displayName: "Prima Sofía" },
-  { id: "abuela-marta", label: "Abuela Marta", displayName: "Abuela Marta" },
+  { id: "tia-ana", label: "Jenny Puyo", displayName: "Tía Jenny" },
+  { id: "tio-carlos", label: "Lida Puyo", displayName: "Tía Lida" },
+  { id: "prima-sofia", label: "Lizeth Puyo", displayName: "Tia Liz" },
 ];
 
 // {{nombreSeleccionado}} will be replaced at runtime
