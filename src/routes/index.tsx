@@ -31,23 +31,14 @@ function Index() {
 
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-0 sm:p-6">
-      {/* Phone-like vertical container — 9:16 on desktop */}
+      {/* Phone-like vertical container — full screen on mobile, 9:16 frame on desktop */}
       <div
-        className="relative w-full overflow-hidden bg-cream shadow-2xl shadow-foreground/20 sm:w-[420px] sm:rounded-[2.25rem] sm:ring-1 sm:ring-foreground/10"
+        className="relative w-full overflow-hidden bg-cream shadow-2xl shadow-foreground/30 sm:w-[min(420px,calc(100svh*9/16))] sm:rounded-[2.25rem] sm:ring-1 sm:ring-foreground/10"
         style={{
           height: "100svh",
-          maxHeight: "calc(100svh - 0px)",
         }}
       >
-        <div
-          className="absolute inset-0 sm:!h-auto"
-          style={{
-            // On desktop force a 9:16 aspect inside the centered phone frame
-          }}
-        />
-        <div
-          className="relative h-full w-full sm:!h-[calc(420px*16/9)]"
-        >
+        <div className="relative h-full w-full">
           {phase === "welcome" && (
             <WelcomeScreen
               onStart={(r) => {
