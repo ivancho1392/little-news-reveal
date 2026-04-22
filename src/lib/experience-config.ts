@@ -5,7 +5,6 @@ import scene1 from "@/assets/images/scene-1.jpg";
 import scene2 from "@/assets/images/scene-2.jpg";
 import scene3 from "@/assets/images/scene-3.jpg";
 import scene4 from "@/assets/images/scene-4.jpg";
-import ultrasound from "@/assets/images/ultrasound.jpg";
 import finalBg from "@/assets/images/final-bg.jpg";
 
 export type Recipient = {
@@ -37,7 +36,7 @@ export const recipients: Recipient[] = [
 export const sceneVideos = {
   scene1: "/assets/videos/scene-1.mp4",
   scene3: "/assets/videos/scene-3.mp4",
-  scene5: "/assets/videos/scene-5.mp4",
+  scene4: "/assets/videos/scene-4.mp4",
 };
 
 // {{nombreSeleccionado}} will be replaced at runtime
@@ -66,13 +65,13 @@ export const scenes: Scene[] = [
     id: "scene-4",
     text: "Dentro de mi mami ahora laten dos corazones...",
     image: scene4,
+    video: sceneVideos.scene4,
     durationMs: 5000,
   },
   {
     id: "scene-5",
     text: "Estoy en camino, {{nombreSeleccionado}}.",
-    image: ultrasound,
-    video: sceneVideos.scene5,
+    image: "/assets/images/ultrasound.jpeg",
     durationMs: 5000,
     variant: "ultrasound",
   },
