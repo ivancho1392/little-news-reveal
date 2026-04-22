@@ -11,6 +11,7 @@ export type Recipient = {
   id: string;
   label: string;
   displayName: string;
+  specialText: string;
 };
 
 export type Scene = {
@@ -27,9 +28,64 @@ export type Scene = {
 export const audioSrc = "/assets/audio/background-music.mp3";
 
 export const recipients: Recipient[] = [
-  { id: "tia-ana", label: "Jenny Puyo", displayName: "Tía Jenny" },
-  { id: "tio-carlos", label: "Lida Puyo", displayName: "Tía Lida" },
-  { id: "prima-sofia", label: "Lizeth Puyo", displayName: "Tia Liz" },
+  {
+    id: "alice",
+    label: "Alice",
+    displayName: "Prima Alice",
+    specialText:
+      "Estoy en camino para ser tu companero/a de juegos y compartir muchas aventuras.",
+  },
+  {
+    id: "jenny",
+    label: "Jenny",
+    displayName: "Tia Jenny",
+    specialText: "Estoy en camino para hacer muchas travesuras contigo.",
+  },
+  {
+    id: "lida",
+    label: "Lida",
+    displayName: "Tia Lida",
+    specialText:
+      "Estoy en camino para llenarte de alegria y compartir muchas aventuras con Alice.",
+  },
+  {
+    id: "lizeth",
+    label: "Lizeth",
+    displayName: "Tia Liz",
+    specialText:
+      "Estoy en camino para robarte muchas sonrisas y crear recuerdos hermosos contigo.",
+  },
+  {
+    id: "stephany",
+    label: "Stephany",
+    displayName: "Tia Stephany",
+    specialText:
+      "Estoy en camino para hacerte tia oficialmente y compartir momentos magicos contigo.",
+  },
+  {
+    id: "emma",
+    label: "Emma",
+    displayName: "Madrina Emma",
+    specialText: "Estoy en camino para llenar tus dias de ternura y dulzura.",
+  },
+  {
+    id: "jorge",
+    label: "Jorge",
+    displayName: "Abuelito Jorge",
+    specialText: "Estoy en camino para hacerte sonreir Abuelito.",
+  },
+  {
+    id: "luz-lopez",
+    label: "Luz Lopez",
+    displayName: "Abuelita Luz",
+    specialText: "Estoy en camino para darte muchos abrazos Abuelita.",
+  },
+  {
+    id: "luz-poloche",
+    label: "Luz Poloche",
+    displayName: "Abuelita Luz",
+    specialText: "Estoy en camino para alegrar tus dias Abuelita.",
+  },
 ];
 
 // Drop your real videos at these paths and they will be picked up automatically.
@@ -74,7 +130,7 @@ export const scenes: Scene[] = [
   },
   {
     id: "scene-5",
-    text: "Estoy en camino, {{nombreSeleccionado}}.",
+    text: "",
     image: "/assets/images/ultrasound.jpeg",
     durationMs: 5000,
     variant: "ultrasound",
@@ -90,6 +146,14 @@ export const scenes: Scene[] = [
 
 export function interpolate(text: string, name: string) {
   return text.replace(/\{\{nombreSeleccionado\}\}/g, name);
+}
+
+export function resolveSceneText(scene: Scene, recipient: Recipient) {
+  if (scene.id === "scene-5") {
+    return `${recipient.specialText} ${recipient.displayName}`;
+  }
+
+  return interpolate(scene.text, recipient.displayName);
 }
 
 // Assets to preload before starting the experience

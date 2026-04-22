@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import type { Scene } from "@/lib/experience-config";
-import { interpolate } from "@/lib/experience-config";
+import type { Recipient, Scene } from "@/lib/experience-config";
+import { resolveSceneText } from "@/lib/experience-config";
 
 type Props = {
   scene: Scene;
-  recipientName: string;
+  recipient: Recipient;
   sceneKey: string; // forces remount + re-animation
   paused?: boolean;
   globalMuted?: boolean;
@@ -12,19 +12,25 @@ type Props = {
 
 export function StoryScene({
   scene,
-  recipientName,
+  recipient,
   sceneKey,
   paused,
   globalMuted = false,
 }: Props) {
-  const text = interpolate(scene.text, recipientName);
+  const text = resolveSceneText(scene, recipient);
   const isUltrasound = scene.variant === "ultrasound";
   const isFinal = scene.variant === "final";
   const [videoFailed, setVideoFailed] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const useVideo = Boolean(scene.video) && !videoFailed;
   const useEmbeddedVideoAudio = scene.videoAudio === "embedded";
   const videoMuted = globalMuted || !useEmbeddedVideoAudio;
+
+  useEffect(() => {
+    setVideoFailed(false);
+    setVideoReady(false);
+  }, [sceneKey]);
 
   // Pause/resume the video alongside the global playback state
   useEffect(() => {
@@ -59,22 +65,24 @@ export function StoryScene({
           </>
         ) : useVideo ? (
           <>
-            {/* Poster fallback rendered behind the video */}
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${scene.image})` }}
-            />
+            <div className="absolute inset-0 bg-foreground" />
             <video
               ref={videoRef}
-              className="absolute inset-0 h-full w-full object-cover"
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
+                videoReady ? "opacity-100" : "opacity-0"
+              }`}
               src={scene.video}
-              poster={scene.image}
               autoPlay
               muted={videoMuted}
               playsInline
               loop={!useEmbeddedVideoAudio}
               preload="auto"
-              onError={() => setVideoFailed(true)}
+              onLoadedData={() => setVideoReady(true)}
+              onCanPlay={() => setVideoReady(true)}
+              onError={() => {
+                setVideoReady(false);
+                setVideoFailed(true);
+              }}
             />
           </>
         ) : (

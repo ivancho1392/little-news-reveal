@@ -44,7 +44,7 @@ export default function App() {
           )}
           {phase === "story" && recipient && (
             <StoryPlayer
-              recipientName={recipient.displayName}
+              recipient={recipient}
               backgroundAudio={backgroundAudio}
               onReplay={() => {
                 setPhase("welcome");

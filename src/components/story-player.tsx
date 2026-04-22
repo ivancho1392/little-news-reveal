@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { scenes } from "@/lib/experience-config";
+import { scenes, type Recipient } from "@/lib/experience-config";
 import { StoryScene } from "./story-scene";
 import { ProgressDots } from "./progress-dots";
 import { AudioControl } from "./audio-control";
@@ -8,12 +8,12 @@ import { ReplayButton } from "./replay-button";
 import { PlaybackControls } from "./playback-controls";
 
 type Props = {
-  recipientName: string;
+  recipient: Recipient;
   onReplay: () => void;
   backgroundAudio: ReturnType<typeof useBackgroundAudio>;
 };
 
-export function StoryPlayer({ recipientName, onReplay, backgroundAudio }: Props) {
+export function StoryPlayer({ recipient, onReplay, backgroundAudio }: Props) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -83,7 +83,7 @@ export function StoryPlayer({ recipientName, onReplay, backgroundAudio }: Props)
     >
       <StoryScene
         scene={scene}
-        recipientName={recipientName}
+        recipient={recipient}
         sceneKey={scene.id}
         paused={paused}
         globalMuted={muted}
