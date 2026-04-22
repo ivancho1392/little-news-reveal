@@ -67,7 +67,6 @@ export const scenes: Scene[] = [
   {
     id: "scene-final",
     text: "Muy pronto nos conoceremos.",
-    secondaryText: "En diciembre.",
     image: finalBg,
     durationMs: 0,
     variant: "final",
