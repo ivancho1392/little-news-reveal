@@ -33,7 +33,7 @@ export const recipients: Recipient[] = [
     label: "Alice",
     displayName: "Prima Alice",
     specialText:
-      "Estoy en camino para ser tu companero/a de juegos y compartir muchas aventuras.",
+      "Estoy en camino para ser tu compañero/a de juegos y compartir muchas aventuras.",
   },
   {
     id: "jenny",
@@ -72,19 +72,19 @@ export const recipients: Recipient[] = [
     id: "jorge",
     label: "Jorge",
     displayName: "Abuelito Jorge",
-    specialText: "Estoy en camino para hacerte sonreir Abuelito.",
+    specialText: "Estoy en camino para hacerte sonreir.",
   },
   {
     id: "luz-lopez",
     label: "Luz Lopez",
     displayName: "Abuelita Luz",
-    specialText: "Estoy en camino para darte muchos abrazos Abuelita.",
+    specialText: "Estoy en camino para darte muchos abrazos.",
   },
   {
     id: "luz-poloche",
     label: "Luz Poloche",
     displayName: "Abuelita Luz",
-    specialText: "Estoy en camino para alegrar tus dias Abuelita.",
+    specialText: "Estoy en camino para alegrar tus dias.",
   },
 ];
 
@@ -132,7 +132,7 @@ export const scenes: Scene[] = [
     id: "scene-5",
     text: "",
     image: "/assets/images/ultrasound.jpeg",
-    durationMs: 5000,
+    durationMs: 7000,
     variant: "ultrasound",
   },
   {
