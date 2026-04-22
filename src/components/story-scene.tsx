@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import type { Scene } from "@/lib/experience-config";
 import { interpolate } from "@/lib/experience-config";
 
@@ -5,18 +6,35 @@ type Props = {
   scene: Scene;
   recipientName: string;
   sceneKey: string; // forces remount + re-animation
+  paused?: boolean;
 };
 
-export function StoryScene({ scene, recipientName, sceneKey }: Props) {
+export function StoryScene({ scene, recipientName, sceneKey, paused }: Props) {
   const text = interpolate(scene.text, recipientName);
   const isUltrasound = scene.variant === "ultrasound";
   const isFinal = scene.variant === "final";
+  const [videoFailed, setVideoFailed] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const useVideo = Boolean(scene.video) && !videoFailed;
+
+  // Pause/resume the video alongside the global playback state
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (paused) {
+      v.pause();
+    } else {
+      v.play().catch(() => {
+        /* autoplay can be blocked silently */
+      });
+    }
+  }, [paused]);
 
   return (
     <div key={sceneKey} className="absolute inset-0 overflow-hidden">
-      {/* Background image */}
+      {/* Background media */}
       <div className="absolute inset-0 animate-scene-fade-in">
-        {isUltrasound ? (
+        {isUltrasound && !useVideo ? (
           <>
             {/* Warm backdrop behind the ultrasound so it never looks empty */}
             <div className="absolute inset-0 bg-foreground" />
@@ -24,6 +42,26 @@ export function StoryScene({ scene, recipientName, sceneKey }: Props) {
             <div
               className="absolute inset-0 bg-contain bg-center bg-no-repeat"
               style={{ backgroundImage: `url(${scene.image})` }}
+            />
+          </>
+        ) : useVideo ? (
+          <>
+            {/* Poster fallback rendered behind the video */}
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${scene.image})` }}
+            />
+            <video
+              ref={videoRef}
+              className="absolute inset-0 h-full w-full object-cover"
+              src={scene.video}
+              poster={scene.image}
+              autoPlay
+              muted
+              playsInline
+              loop
+              preload="auto"
+              onError={() => setVideoFailed(true)}
             />
           </>
         ) : (
@@ -35,7 +73,7 @@ export function StoryScene({ scene, recipientName, sceneKey }: Props) {
         {/* Soft overlay for legibility */}
         <div
           className={`absolute inset-0 ${
-            isUltrasound
+            isUltrasound && !useVideo
               ? "bg-gradient-to-b from-transparent via-transparent to-foreground/80"
               : "bg-gradient-to-b from-foreground/10 via-foreground/5 to-foreground/55"
           }`}
@@ -59,12 +97,14 @@ export function StoryScene({ scene, recipientName, sceneKey }: Props) {
             >
               {text}
             </p>
-            <p
-              className="animate-text-rise font-serif-display text-5xl italic tracking-wide text-cream drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]"
-              style={{ animationDelay: "1.4s" }}
-            >
-              {scene.secondaryText}
-            </p>
+            {scene.secondaryText && (
+              <p
+                className="animate-text-rise font-serif-display text-5xl italic tracking-wide text-cream drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]"
+                style={{ animationDelay: "1.4s" }}
+              >
+                {scene.secondaryText}
+              </p>
+            )}
           </div>
         ) : (
           <p

@@ -76,6 +76,7 @@ export function StoryPlayer({ recipientName, onReplay }: Props) {
         scene={scene}
         recipientName={recipientName}
         sceneKey={scene.id}
+        paused={paused}
       />
 
       {/* Top bar: progress */}
