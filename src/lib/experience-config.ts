@@ -86,6 +86,12 @@ export const recipients: Recipient[] = [
     displayName: "Abuelita Luz",
     specialText: "Estoy en camino para alegrar tus días.",
   },
+    {
+    id: "cris-rojas",
+    label: "Cris Rojas",
+    displayName: "Tío Cris",
+    specialText: "Estoy en camino para hacerte sonreir.",
+  },
 ];
 
 // Drop your real videos at these paths and they will be picked up automatically.
