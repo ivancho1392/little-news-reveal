@@ -3,16 +3,25 @@ import { WelcomeScreen } from "@/components/welcome-screen";
 import { StoryPlayer } from "@/components/story-player";
 import { PreloadScreen } from "@/components/preload-screen";
 import type { Recipient } from "@/lib/experience-config";
+import { useBackgroundAudio } from "@/components/use-background-audio";
 
 type Phase = "welcome" | "loading" | "story";
 
 export default function App() {
   const [phase, setPhase] = useState<Phase>("welcome");
   const [recipient, setRecipient] = useState<Recipient | null>(null);
+  const backgroundAudio = useBackgroundAudio();
+  const { reset: resetBackgroundAudio, start: startBackgroundAudio } = backgroundAudio;
 
   useEffect(() => {
     document.title = "Una sorpresa muy especial para ti";
   }, []);
+
+  useEffect(() => {
+    if (phase === "welcome") {
+      resetBackgroundAudio();
+    }
+  }, [phase, resetBackgroundAudio]);
 
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-0 sm:p-6">
@@ -24,6 +33,7 @@ export default function App() {
           {phase === "welcome" && (
             <WelcomeScreen
               onStart={(nextRecipient) => {
+                startBackgroundAudio({ initialVolume: 0.32, fadeMs: 1800 });
                 setRecipient(nextRecipient);
                 setPhase("loading");
               }}
@@ -35,6 +45,7 @@ export default function App() {
           {phase === "story" && recipient && (
             <StoryPlayer
               recipientName={recipient.displayName}
+              backgroundAudio={backgroundAudio}
               onReplay={() => {
                 setPhase("welcome");
                 setRecipient(null);

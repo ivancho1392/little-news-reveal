@@ -10,18 +10,21 @@ import { PlaybackControls } from "./playback-controls";
 type Props = {
   recipientName: string;
   onReplay: () => void;
+  backgroundAudio: ReturnType<typeof useBackgroundAudio>;
 };
 
-export function StoryPlayer({ recipientName, onReplay }: Props) {
+export function StoryPlayer({ recipientName, onReplay, backgroundAudio }: Props) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [progress, setProgress] = useState(0);
   const scene = scenes[index];
   const isLast = index === scenes.length - 1;
 
-  // Audio intensity rises towards the final scene
+  // The background music stays soft, gives way to scene 4's embedded audio,
+  // and returns from scene 5 onward.
   const intensity = 0.3 + (index / Math.max(1, scenes.length - 1)) * 0.4;
-  const { muted, toggleMuted } = useBackgroundAudio({ active: true, intensity });
+  const backgroundTargetVolume = scene.id === "scene-4" ? 0 : intensity;
+  const { muted, toggleMuted, setTargetVolume } = backgroundAudio;
 
   // Auto-advance with progress tracking + pause support
   const startedAtRef = useRef<number>(0);
@@ -32,6 +35,12 @@ export function StoryPlayer({ recipientName, onReplay }: Props) {
     elapsedRef.current = 0;
     setProgress(0);
   }, [index]);
+
+  useEffect(() => {
+    setTargetVolume(backgroundTargetVolume, {
+      durationMs: scene.id === "scene-4" ? 1000 : 1600,
+    });
+  }, [backgroundTargetVolume, scene.id, setTargetVolume]);
 
   useEffect(() => {
     if (!scene.durationMs) return;
@@ -77,6 +86,7 @@ export function StoryPlayer({ recipientName, onReplay }: Props) {
         recipientName={recipientName}
         sceneKey={scene.id}
         paused={paused}
+        globalMuted={muted}
       />
 
       {/* Top bar: progress */}

@@ -19,6 +19,7 @@ export type Scene = {
   secondaryText?: string;
   image: string; // poster / fallback when no video
   video?: string; // optional background video; falls back to image if missing
+  videoAudio?: "muted" | "embedded";
   durationMs: number; // 0 = stays until user action
   variant?: "default" | "ultrasound" | "final";
 };
@@ -46,19 +47,21 @@ export const scenes: Scene[] = [
     text: "El 2026 viene con algo especial.",
     image: scene1,
     video: sceneVideos.scene1,
-    durationMs: 5000,
+    videoAudio: "muted",
+    durationMs: 6000,
   },
   {
     id: "scene-2",
     text: "El año del caballo chino, símbolo de fuerza, libertad y nuevas aventuras.",
     image: scene2,
-    durationMs: 5000,
+    durationMs: 8000,
   },
   {
     id: "scene-3",
     text: "Y mientras todo comienza a tomar forma...",
     image: scene3,
     video: sceneVideos.scene3,
+    videoAudio: "muted",
     durationMs: 5000,
   },
   {
@@ -66,7 +69,8 @@ export const scenes: Scene[] = [
     text: "Dentro de mi mami ahora laten dos corazones...",
     image: scene4,
     video: sceneVideos.scene4,
-    durationMs: 5000,
+    videoAudio: "embedded",
+    durationMs: 10000,
   },
   {
     id: "scene-5",

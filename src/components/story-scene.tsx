@@ -7,20 +7,33 @@ type Props = {
   recipientName: string;
   sceneKey: string; // forces remount + re-animation
   paused?: boolean;
+  globalMuted?: boolean;
 };
 
-export function StoryScene({ scene, recipientName, sceneKey, paused }: Props) {
+export function StoryScene({
+  scene,
+  recipientName,
+  sceneKey,
+  paused,
+  globalMuted = false,
+}: Props) {
   const text = interpolate(scene.text, recipientName);
   const isUltrasound = scene.variant === "ultrasound";
   const isFinal = scene.variant === "final";
   const [videoFailed, setVideoFailed] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const useVideo = Boolean(scene.video) && !videoFailed;
+  const useEmbeddedVideoAudio = scene.videoAudio === "embedded";
+  const videoMuted = globalMuted || !useEmbeddedVideoAudio;
 
   // Pause/resume the video alongside the global playback state
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
+
+    v.muted = videoMuted;
+    v.volume = videoMuted ? 0 : 1;
+
     if (paused) {
       v.pause();
     } else {
@@ -28,7 +41,7 @@ export function StoryScene({ scene, recipientName, sceneKey, paused }: Props) {
         /* autoplay can be blocked silently */
       });
     }
-  }, [paused]);
+  }, [paused, videoMuted, sceneKey]);
 
   return (
     <div key={sceneKey} className="absolute inset-0 overflow-hidden">
@@ -57,9 +70,9 @@ export function StoryScene({ scene, recipientName, sceneKey, paused }: Props) {
               src={scene.video}
               poster={scene.image}
               autoPlay
-              muted
+              muted={videoMuted}
               playsInline
-              loop
+              loop={!useEmbeddedVideoAudio}
               preload="auto"
               onError={() => setVideoFailed(true)}
             />
