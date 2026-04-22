@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { scenes } from "@/lib/experience-config";
 import { StoryScene } from "./story-scene";
 import { ProgressDots } from "./progress-dots";
 import { AudioControl } from "./audio-control";
 import { useBackgroundAudio } from "./use-background-audio";
 import { ReplayButton } from "./replay-button";
+import { PlaybackControls } from "./playback-controls";
 
 type Props = {
   recipientName: string;
@@ -13,6 +14,8 @@ type Props = {
 
 export function StoryPlayer({ recipientName, onReplay }: Props) {
   const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [progress, setProgress] = useState(0);
   const scene = scenes[index];
   const isLast = index === scenes.length - 1;
 
@@ -20,17 +23,48 @@ export function StoryPlayer({ recipientName, onReplay }: Props) {
   const intensity = 0.3 + (index / Math.max(1, scenes.length - 1)) * 0.4;
   const { muted, toggleMuted } = useBackgroundAudio({ active: true, intensity });
 
-  // Auto-advance based on scene duration
+  // Auto-advance with progress tracking + pause support
+  const startedAtRef = useRef<number>(0);
+  const elapsedRef = useRef<number>(0);
+
+  useEffect(() => {
+    // Reset progress when scene changes
+    elapsedRef.current = 0;
+    setProgress(0);
+  }, [index]);
+
   useEffect(() => {
     if (!scene.durationMs) return;
-    const t = setTimeout(() => {
-      setIndex((i) => Math.min(i + 1, scenes.length - 1));
-    }, scene.durationMs);
-    return () => clearTimeout(t);
-  }, [index, scene.durationMs]);
+    if (paused) return;
+
+    startedAtRef.current = performance.now() - elapsedRef.current;
+    let raf = 0;
+
+    const tick = (t: number) => {
+      const elapsed = t - startedAtRef.current;
+      elapsedRef.current = elapsed;
+      const p = Math.min(1, elapsed / scene.durationMs);
+      setProgress(p);
+      if (p >= 1) {
+        setIndex((i) => Math.min(i + 1, scenes.length - 1));
+        return;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [index, scene.durationMs, paused]);
 
   const advance = () => {
     if (!isLast) setIndex((i) => i + 1);
+  };
+
+  const goBack = () => {
+    setIndex((i) => Math.max(0, i - 1));
+  };
+
+  const goTo = (i: number) => {
+    setIndex(Math.max(0, Math.min(scenes.length - 1, i)));
   };
 
   return (
@@ -44,12 +78,27 @@ export function StoryPlayer({ recipientName, onReplay }: Props) {
         sceneKey={scene.id}
       />
 
-      {/* Top bar: progress + audio */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center gap-3 px-5 pt-5">
-        <div className="flex-1">
-          <ProgressDots total={scenes.length} current={index} />
+      {/* Top bar: progress */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 px-5 pt-5">
+        <ProgressDots
+          total={scenes.length}
+          current={index}
+          progress={progress}
+          onSelect={goTo}
+        />
+      </div>
+
+      {/* Controls bar below progress */}
+      <div className="absolute inset-x-0 top-10 z-20 flex items-center justify-between px-5 pt-2">
+        <div onClick={(e) => e.stopPropagation()}>
+          <PlaybackControls
+            paused={paused}
+            onTogglePause={() => setPaused((p) => !p)}
+            onBack={goBack}
+            canGoBack={index > 0}
+          />
         </div>
-        <div className="pointer-events-auto">
+        <div onClick={(e) => e.stopPropagation()}>
           <AudioControl muted={muted} onToggle={toggleMuted} />
         </div>
       </div>
