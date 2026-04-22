@@ -39,7 +39,8 @@ export function useBackgroundAudio({ active, intensity = 0.4 }: Props) {
     let raf = 0;
     const tick = (t: number) => {
       const p = Math.min(1, (t - startTs) / duration);
-      audio.volume = start + (target - start) * p;
+      const v = start + (target - start) * p;
+      audio.volume = Math.max(0, Math.min(1, v));
       if (p < 1) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
