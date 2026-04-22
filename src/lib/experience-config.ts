@@ -5,7 +5,7 @@ import scene1 from "@/assets/images/scene-1.jpg";
 import scene2 from "@/assets/images/scene-2.jpg";
 import scene3 from "@/assets/images/scene-3.jpg";
 import scene4 from "@/assets/images/scene-4.jpg";
-import finalBg from "@/assets/images/final-bg.jpg";
+import finalBg from "@/assets/images/final-bg.jpeg";
 
 export type Recipient = {
   id: string;
