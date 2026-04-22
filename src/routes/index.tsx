@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { WelcomeScreen } from "@/components/welcome-screen";
 import { StoryPlayer } from "@/components/story-player";
+import { PreloadScreen } from "@/components/preload-screen";
 import type { Recipient } from "@/lib/experience-config";
 
 export const Route = createFileRoute("/")({
@@ -23,7 +24,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Phase = "welcome" | "story";
+type Phase = "welcome" | "loading" | "story";
 
 function Index() {
   const [phase, setPhase] = useState<Phase>("welcome");
@@ -43,9 +44,12 @@ function Index() {
             <WelcomeScreen
               onStart={(r) => {
                 setRecipient(r);
-                setPhase("story");
+                setPhase("loading");
               }}
             />
+          )}
+          {phase === "loading" && (
+            <PreloadScreen onReady={() => setPhase("story")} />
           )}
           {phase === "story" && recipient && (
             <StoryPlayer
