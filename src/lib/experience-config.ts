@@ -1,6 +1,13 @@
 // Centralized, easy-to-edit configuration for the reveal experience.
 // Replace texts, durations, image paths or audio here without touching components.
 
+import scene1 from "@/assets/images/scene-1.jpg";
+import scene2 from "@/assets/images/scene-2.jpg";
+import scene3 from "@/assets/images/scene-3.jpg";
+import scene4 from "@/assets/images/scene-4.jpg";
+import ultrasound from "@/assets/images/ultrasound.jpg";
+import finalBg from "@/assets/images/final-bg.jpg";
+
 export type Recipient = {
   id: string;
   label: string;
@@ -29,31 +36,31 @@ export const scenes: Scene[] = [
   {
     id: "scene-1",
     text: "El 2026 viene con algo especial.",
-    image: "/assets/images/scene-1.jpg",
+    image: scene1,
     durationMs: 3000,
   },
   {
     id: "scene-2",
     text: "El año del caballo chino, símbolo de fuerza, libertad y nuevas aventuras.",
-    image: "/assets/images/scene-2.jpg",
+    image: scene2,
     durationMs: 3500,
   },
   {
     id: "scene-3",
     text: "Y mientras todo comienza a tomar forma...",
-    image: "/assets/images/scene-3.jpg",
+    image: scene3,
     durationMs: 3000,
   },
   {
     id: "scene-4",
     text: "Dentro de mi mami ahora laten dos corazones...",
-    image: "/assets/images/scene-4.jpg",
+    image: scene4,
     durationMs: 4500,
   },
   {
     id: "scene-5",
     text: "Estoy en camino, {{nombreSeleccionado}}.",
-    image: "/assets/images/ultrasound.jpg",
+    image: ultrasound,
     durationMs: 4000,
     variant: "ultrasound",
   },
@@ -61,7 +68,7 @@ export const scenes: Scene[] = [
     id: "scene-final",
     text: "Muy pronto nos conoceremos.",
     secondaryText: "En diciembre.",
-    image: "/assets/images/final-bg.jpg",
+    image: finalBg,
     durationMs: 0,
     variant: "final",
   },

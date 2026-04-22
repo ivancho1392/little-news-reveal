@@ -16,18 +16,28 @@ export function StoryScene({ scene, recipientName, sceneKey }: Props) {
     <div key={sceneKey} className="absolute inset-0 overflow-hidden">
       {/* Background image */}
       <div className="absolute inset-0 animate-scene-fade-in">
-        <div
-          className={`absolute inset-0 bg-cover bg-center ${
-            isUltrasound ? "" : "animate-ken-burns"
-          }`}
-          style={{ backgroundImage: `url(${scene.image})` }}
-        />
+        {isUltrasound ? (
+          <>
+            {/* Warm backdrop behind the ultrasound so it never looks empty */}
+            <div className="absolute inset-0 bg-foreground" />
+            {/* Ultrasound shown fully (contain) so the baby is always visible */}
+            <div
+              className="absolute inset-0 bg-contain bg-center bg-no-repeat"
+              style={{ backgroundImage: `url(${scene.image})` }}
+            />
+          </>
+        ) : (
+          <div
+            className="absolute inset-0 bg-cover bg-center animate-ken-burns"
+            style={{ backgroundImage: `url(${scene.image})` }}
+          />
+        )}
         {/* Soft overlay for legibility */}
         <div
           className={`absolute inset-0 ${
             isUltrasound
-              ? "bg-gradient-to-b from-cream/30 via-cream/10 to-cream/70"
-              : "bg-gradient-to-b from-foreground/10 via-foreground/5 to-foreground/40"
+              ? "bg-gradient-to-b from-transparent via-transparent to-foreground/80"
+              : "bg-gradient-to-b from-foreground/10 via-foreground/5 to-foreground/55"
           }`}
         />
       </div>
