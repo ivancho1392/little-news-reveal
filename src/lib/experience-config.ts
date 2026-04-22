@@ -1,6 +1,13 @@
 // Centralized, easy-to-edit configuration for the reveal experience.
 // Replace texts, durations, image paths or audio here without touching components.
 
+import scene1 from "@/assets/images/scene-1.jpg";
+import scene2 from "@/assets/images/scene-2.jpg";
+import scene3 from "@/assets/images/scene-3.jpg";
+import scene4 from "@/assets/images/scene-4.jpg";
+import ultrasound from "@/assets/images/ultrasound.jpg";
+import finalBg from "@/assets/images/final-bg.jpg";
+
 export type Recipient = {
   id: string;
   label: string;
