@@ -20,6 +20,7 @@ export function StoryScene({
   const text = resolveSceneText(scene, recipient);
   const isUltrasound = scene.variant === "ultrasound";
   const isFinal = scene.variant === "final";
+  const useGlassTextPanel = scene.id === "scene-3" || scene.id === "scene-5";
   const [videoFailed, setVideoFailed] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -105,7 +106,11 @@ export function StoryScene({
       <div className="relative flex h-full w-full flex-col items-center justify-end px-8 pb-24 text-center">
         {isUltrasound ? (
           <p
-            className="animate-text-rise font-serif-display text-3xl leading-snug text-cream drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]"
+            className={`animate-text-rise font-serif-display text-3xl leading-snug text-cream drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)] ${
+              useGlassTextPanel
+                ? "mx-auto max-w-[18rem] rounded-2xl border border-white/12 bg-black/35 px-5 py-4 shadow-[0_10px_30px_rgba(0,0,0,0.18)] backdrop-blur-md"
+                : ""
+            }`}
             style={{ animationDelay: "0.4s" }}
           >
             {text}
@@ -129,7 +134,11 @@ export function StoryScene({
           </div>
         ) : (
           <p
-            className="animate-text-rise font-serif-display text-2xl leading-snug text-cream drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)] sm:text-3xl"
+            className={`animate-text-rise font-serif-display text-2xl leading-snug text-cream drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)] sm:text-3xl ${
+              useGlassTextPanel
+                ? "mx-auto max-w-[19rem] rounded-2xl border border-white/12 bg-black/35 px-5 py-4 shadow-[0_10px_30px_rgba(0,0,0,0.18)] backdrop-blur-md"
+                : ""
+            }`}
             style={{ animationDelay: "0.4s" }}
           >
             {text}
