@@ -2,7 +2,7 @@
 // Replace texts, durations, image paths, videos or audio here without touching components.
 
 import scene1 from "@/assets/images/scene-1.jpg";
-import scene2 from "@/assets/images/scene-2.jpg";
+import scene2 from "@/assets/images/scene-2.jpeg";
 import scene3 from "@/assets/images/scene-3.jpg";
 import scene4 from "@/assets/images/scene-4.jpg";
 import finalBg from "@/assets/images/final-bg.jpeg";
@@ -88,8 +88,14 @@ export const recipients: Recipient[] = [
   },
     {
     id: "cris-rojas",
-    label: "Cris Rojas",
+    label: "Cristian Rojas",
     displayName: "Tío Cris",
+    specialText: "Estoy en camino para hacerte sonreir.",
+  },
+      {
+    id: "andres",
+    label: "Andres",
+    displayName: "Tío Andrés",
     specialText: "Estoy en camino para hacerte sonreir.",
   },
 ];
@@ -114,7 +120,7 @@ export const scenes: Scene[] = [
   },
   {
     id: "scene-2",
-    text: "El año del caballo chino, símbolo de fuerza, libertad y nuevas aventuras.",
+    text: "10 años caminando juntos... 26/11/2016  🤍💍",
     image: scene2,
     durationMs: 8000,
   },
